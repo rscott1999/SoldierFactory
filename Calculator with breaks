@@ -1,0 +1,221 @@
+
+import java.util.Scanner; 
+import static java.lang.System.*;
+import static java.lang.Math.*;
+
+public class Battle_Calculator
+{
+    int ArmyHp,ArmyAc,ArmyBab,ArmyAttackDie,ArmyAttackMod = 0;
+    int EnemyHp,EnemyAc,EnemyBab,EnemyAttackDie,EnemyAttackMod = 0;
+    int RoundAc,RoundBab,RoundAttack = 0;
+    int armypop,enemypop;
+    int ArmyHpAvg,EnemyHpAvg;
+    int Turn;
+    int r,TempHp;
+    int DieTotal;
+    int AttackMod,Damage;
+    
+    public static void main( String[] args )
+    {
+        Battle_Calculator n = new Battle_Calculator();
+        n.input();
+        n.crossroad();
+    }
+    
+    void input()
+    {
+        System.out.println("How many troops are in your army?");
+        armypop = Expo.enterInt();
+        System.out.println("What is the Hp of the troops?");
+        ArmyHp = (Expo.enterInt() * armypop);
+        ArmyHpAvg = Math.round(ArmyHp / armypop);
+        System.out.println("What is the Ac of the troops?");
+        ArmyAc = (Expo.enterInt() * armypop);
+        System.out.println("What is the Bab of the troops?");
+        ArmyBab = (Expo.enterInt() * armypop);
+        System.out.println("When the troops are attacking what die would you roll for the damage? (Ex. If the damage is 1d6+2 type in '6'.)");
+        ArmyAttackDie = Expo.enterInt();
+        System.out.println("What would be the modifier for the damage? (Ex. If the damage is 1d6+2 type in '2'.)");
+        ArmyAttackMod = Expo.enterInt();
+        System.out.println("");
+        
+        System.out.println("How many troops are in the enemy army?");
+        enemypop = Expo.enterInt();
+        System.out.println("What is the Hp of the troops?");
+        EnemyHp = (Expo.enterInt() * enemypop);
+        EnemyHpAvg = Math.round(EnemyHp / enemypop);
+        System.out.println("What is the Ac of the troops?");
+        EnemyAc = (Expo.enterInt() * enemypop);
+        System.out.println("What is the Bab of the troops?");
+        EnemyBab = (Expo.enterInt() * enemypop);
+        System.out.println("When the troops are attacking what die would you roll for the damage? (Ex. If the damage is 1d6+2 type in '6'.)");
+        EnemyAttackDie = Expo.enterInt();
+        System.out.println("What would be the modifier for the damage? (Ex. If the damage is 1d6+2 type in '2'.)");
+        EnemyAttackMod = Expo.enterInt();
+        System.out.println("");
+        
+        System.out.println("Is your army attacking or defending?");
+        System.out.println("1. Attacking");
+        System.out.println("2. Defending");
+        Turn = Expo.enterInt();
+        System.out.println("");
+    }
+    
+    void crossroad()
+    {   
+        Battle_Calculator n = new Battle_Calculator();
+        switch (Turn)
+        {
+            case 1:
+            {
+                n.attackSeq();
+                break;
+            }
+            case 2:
+            {
+                n.defendSeq();
+                break;
+            }
+            default:
+            {
+                System.out.println("Error: You did not properly enter who was attacking or defending.");
+                System.out.println("Please terminate this program.");
+            }
+        }
+    }
+    
+    void attackSeq()
+    {
+        while (armypop != 0 && enemypop != 0)
+        {
+            System.out.println("Would you like to start a turn of combat? (y or n)");
+            char combat = Expo.enterChar();
+            switch (combat)
+            {
+                case 'y':
+                {
+                    r = 0;
+                    while (r != enemypop)
+                    {
+                        r += 1;
+                        DieTotal += DieRoller.d(20);
+                    }
+                    RoundBab = EnemyBab + DieTotal;
+                    AttackMod = RoundBab / ArmyAc;
+                    
+                    r=0;
+                    while (r != enemypop)
+                    {
+                        r += 1;
+                        DieTotal += DieRoller.d(EnemyAttackDie);
+                    }
+                    RoundAttack = DieTotal + (EnemyAttackMod * enemypop);
+                    Damage = RoundAttack * AttackMod;
+                    TempHp = ArmyHp;
+                    armypop -= Math.round((ArmyHp-(TempHp-Damage))/ArmyHpAvg);
+                    ArmyHp -= Damage;
+                    
+                    
+                    r = 0;
+                    while (r != armypop)
+                    {
+                        r += 1;
+                        DieTotal += DieRoller.d(20);
+                    }
+                    RoundBab = ArmyBab + DieTotal;
+                    AttackMod = RoundBab / EnemyAc;
+                    
+                    r=0;
+                    while (r != armypop)
+                    {
+                        r += 1;
+                        DieTotal += DieRoller.d(ArmyAttackDie);
+                    }
+                    RoundAttack = DieTotal + (ArmyAttackMod * armypop);
+                    Damage = RoundAttack * AttackMod;
+                    TempHp = EnemyHp;
+                    enemypop -= Math.round((EnemyHp-(TempHp-Damage))/EnemyHpAvg);
+                    EnemyHp -= Damage;
+                    
+                    System.out.println("Ally Soldiers: " +armypop);
+                    System.out.println("Enemy Soldiers: " +enemypop);
+                    System.out.println();
+                    break;
+                }
+                case 'n':
+                {
+                    Battle_Calculator n = new Battle_Calculator();
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    
+    void defendSeq()
+    {
+        while (armypop != 0 && enemypop != 0)
+        {
+            System.out.println("Would you like to start a turn of combat? (y or n)");
+            char combat = Expo.enterChar();
+            switch (combat)
+            {
+                case 'y':
+                {
+                    r = 0;
+                    while (r != armypop)
+                    {
+                        r += 1;
+                        DieTotal += DieRoller.d(20);
+                    }
+                    RoundBab = ArmyBab + DieTotal;
+                    AttackMod = RoundBab / EnemyAc;
+                    
+                    r=0;
+                    while (r != armypop)
+                    {
+                        r += 1;
+                        DieTotal += DieRoller.d(ArmyAttackDie);
+                    }
+                    RoundAttack = DieTotal + (ArmyAttackMod * armypop);
+                    Damage = RoundAttack * AttackMod;
+                    TempHp = EnemyHp;
+                    enemypop -= Math.round((EnemyHp-(TempHp-Damage))/EnemyHpAvg);
+                    EnemyHp -= Damage;
+                    
+                    r = 0;
+                    while (r != enemypop)
+                    {
+                        r += 1;
+                        DieTotal += DieRoller.d(20);
+                    }
+                    RoundBab = EnemyBab + DieTotal;
+                    AttackMod = RoundBab / ArmyAc;
+                    
+                    r=0;
+                    while (r != enemypop)
+                    {
+                        r += 1;
+                        DieTotal += DieRoller.d(EnemyAttackDie);
+                    }
+                    RoundAttack = DieTotal + (EnemyAttackMod * enemypop);
+                    Damage = RoundAttack * AttackMod;
+                    TempHp = ArmyHp;
+                    armypop -= Math.round((ArmyHp-(TempHp-Damage))/ArmyHpAvg);
+                    ArmyHp -= Damage;
+                    
+                    System.out.println("Ally Soldiers: " +armypop);
+                    System.out.println("Enemy Soldiers: " +enemypop);
+                    System.out.println();
+                    break;
+                }
+                case 'n':
+                {
+                    Battle_Calculator n = new Battle_Calculator();
+                    break;
+                }
+            }
+            break;
+        }
+    }
+}
