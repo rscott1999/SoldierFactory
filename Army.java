@@ -12,29 +12,29 @@ public class Army {
 		for(int n=0;n<i;n++)
 			army.add(new Soldier());
 	}
-	public Army(String a){
+	public Army(String a){ //Reader that does not work
 		int[] stat = new int[6];
 		String name="";
 		int cnt=0;
 		while(a.length()>0){
 			while(a.indexOf("**")>a.indexOf("*")){
-				if(a.indexOf(" ")>a.indexOf("*")){
+				if(a.indexOf(" ")<a.indexOf("*")&&a.indexOf(" ")!=-1){
 					name=a.substring(0,a.indexOf("*"));
-					a=a.substring(a.indexOf("*")+1);
+					a=a.substring(a.indexOf("*"));
+					System.out.println(name);
 				}
+				a=a.substring(1);
 				stat[cnt]=Integer.parseInt(a.substring(0,a.indexOf("*")));
+				a=a.substring(a.substring(0,a.indexOf("*")).length());
+				//debug
+				System.out.println(a);
 				cnt++;
 			}
 			cnt=0;
 			a=a.substring(2);
 			army.add(new Soldier(name,stat));
-			name="";
+			stat=new int[6];
 		}
-	}
-	public boolean isALetter(char a){
-		if((a>64&&a<91)||(a>96&&a<123))
-			return true;
-		return false;
 	}
 	public String toString(){
 		String res="";
