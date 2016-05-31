@@ -21,13 +21,10 @@ public class Army {
 				if(a.indexOf(" ")<a.indexOf("*")&&a.indexOf(" ")!=-1){
 					name=a.substring(0,a.indexOf("*"));
 					a=a.substring(a.indexOf("*"));
-					System.out.println(name);
 				}
 				a=a.substring(1);
 				stat[cnt]=Integer.parseInt(a.substring(0,a.indexOf("*")));
 				a=a.substring(a.substring(0,a.indexOf("*")).length());
-				//debug
-				System.out.println(a);
 				cnt++;
 			}
 			cnt=0;
