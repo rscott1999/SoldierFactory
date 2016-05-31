@@ -129,6 +129,9 @@ public class Soldier {
 	public int modifierLogic(int x){
 		return (int)Math.floor(((double)(x-10))/2);
 	}
+	public String getName(){
+		return name;
+	}
 	public String toString(){
 		return "Name: "+name+"\n"+
 			   "Class: "+Class+" "+LVL+"\n"+

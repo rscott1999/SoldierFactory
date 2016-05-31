@@ -33,6 +33,12 @@ public class Army {
 			stat=new int[6];
 		}
 	}
+	public int getSize(){
+		return army.size();
+	}
+	public ArrayList<Soldier> get(){
+		return army;
+	}
 	public String toString(){
 		String res="";
 		char s='*';
